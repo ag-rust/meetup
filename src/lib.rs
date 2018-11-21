@@ -81,7 +81,7 @@ impl MeetupClient {
         MeetupClient{name: name.to_string(), url: url}
     }
 
-    pub fn get_events(&self) -> Result<Vec<Event>, Error> {
+    pub fn get_events(&self) -> Result<<Option<Vec<Event>>, Error> {
         let client = Client::new();
         let mut url = self.url.clone();
         url.set_path(&format!("{}/{}", self.name, "events"));
@@ -110,7 +110,7 @@ mod tests {
         let api_key = env::var("MEETUP_API_KEY").unwrap();
         let name = env::var("MEETUP_NAME").unwrap();
         let api = MeetupClient::new(&api_key, &name);
-        let events = api.get_events().expect("no events");
+        let events = api.get_events();
         println!("{:#?}", events);
     }
 }
