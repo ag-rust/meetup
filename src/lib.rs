@@ -8,7 +8,7 @@ use reqwest::{Client, Url, Error};
 
 const MEETUP_API_URL: &str = "https://api.meetup.com/";
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Venue {
     id: u64,
     name: String,
@@ -21,13 +21,13 @@ pub struct Venue {
     localized_country_name: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum GroupJoinMode {
     Open, Approval, Closed
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Group {
     created: u64,
     name: String,
@@ -42,13 +42,19 @@ pub struct Group {
     timezone: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum EventVisibility {
     Public, PublicLimited, Members
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum EventStatus {
+    Cancelled, Upcoming, Past, Proposed, Suggested, Draft
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Event {
     created: u64,
     duration: u64,
@@ -92,13 +98,6 @@ impl MeetupClient {
         Ok(events)
     }
 }
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum EventStatus {
-    Cancelled, Upcoming, Past, Proposed, Suggested, Draft
-}
-
 
 #[cfg(test)]
 mod tests {
