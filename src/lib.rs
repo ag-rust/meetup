@@ -81,7 +81,7 @@ impl MeetupClient {
         MeetupClient{name: name.to_string(), url: url}
     }
 
-    pub fn get_events(&self) -> Result<Option<Vec<Event>>, Error> {
+    pub fn get_events(&self) -> Result<Vec<Event>, Error> {
         let client = Client::new();
         let mut url = self.url.clone();
         url.set_path(&format!("{}/{}", self.name, "events"));
@@ -89,10 +89,7 @@ impl MeetupClient {
 
         let events:Vec<Event> = client.get(url)
             .send()?.json()?;
-        match events.len() {
-            0 => Ok(None),
-            _ => Ok(Some(events))
-        }
+        Ok(events)
     }
 }
 
